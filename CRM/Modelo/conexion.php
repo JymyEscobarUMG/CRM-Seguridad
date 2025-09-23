@@ -1,24 +1,4 @@
 <?php
-/*  
-    ------------------------------------------------
-          INFORMACION TECNICA DEL SISTEMA
-    ------------------------------------------------
-        -> Autor: Daniel Rivera  
-            https://github.com/DanielRivera03
-    
-        -> Sistema gestion de Casos [CRM]
-            PHP Puro / MVC
-        
-        -> Inspirado bajo el software de codigo
-            abierto VTiger Real, este sistema no
-            tiene ninguna relacion directa con 
-            el sistema mencionado previamente
-
-        -> Creditos logo: https://www.vtiger.com/
-    ---------------------------------------------------
-    COMPARTIDO Y LIBERADO CON FINES ACADEMICOS 
-    ---------------------------------------------------   
-*/
 class Conexion {
     private $servidor = "localhost";
     private $usuario  = "root";
