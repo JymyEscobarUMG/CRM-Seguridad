@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crm-php
+    ports:
+      - "8080:80"
+    environment:
+      PHP_MEMORY_LIMIT: 512M
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: crm-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: crm
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      # IMPORT AUTOMÁTICO: usa el dump sanitizado
+      - "./Base de Datos/crm.sql:/docker-entrypoint-initdb.d/01-crm.sql:ro"
+      - "./Base de Datos/crm_sanitized/tablas.sql:/docker-entrypoint-initdb.d/02-crm.sql:ro"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-prootpass"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  phpmyadmin:
+    image: phpmyadmin:5-apache
+    container_name: crm-pma
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 0
+      UPLOAD_LIMIT: 512M
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+
+volumes:
+  db_data:
