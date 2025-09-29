@@ -21,8 +21,8 @@
 */
 session_start();
 // CONEXION DE SISTEMA CRM -> IMPORTANDO ARCHIVO
-require('../modelo/conexion.php');
-// ACC -> ACCION CONTROLADOR {URL} 
+require(__DIR__ . '/../Modelo/conexion.php');
+// ACC -> ACCION CONTROLADOR {URL}
 if(isset($_GET['acc']))
 {
 	$accion=$_GET['acc'];  // ENVIO GET DE VALOR ACCION {URL}
@@ -34,11 +34,39 @@ else
 switch ($accion) 
 {
     case 1:
-		require('../vista/LoginAdministradores.php');
-    	break;	
+  require(__DIR__ . '/../Vista/LoginAdministradores.php');
+    	break;
     case 2:
-    	// VALIDAR INICIO DE SESIÓN
-        $usuario = $con->login($cnn, $_POST['Usuario'], $_POST['Clave']);
+     	// VALIDAR reCAPTCHA
+         if (!isset($_POST['g-recaptcha-response']) || empty($_POST['g-recaptcha-response'])) {
+             header('location:../Vista/MensajeUsuarios.php?error=recaptcha_missing');
+             exit;
+         }
+
+         $recaptcha_secret = env('RECAPTCHA_SECRET_KEY');
+         $recaptcha_response = $_POST['g-recaptcha-response'];
+         $url = 'https://www.google.com/recaptcha/api/siteverify';
+         $data = [
+             'secret' => $recaptcha_secret,
+             'response' => $recaptcha_response
+         ];
+         $options = [
+             'http' => [
+                 'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                 'method' => 'POST',
+                 'content' => http_build_query($data)
+             ]
+         ];
+         $context = stream_context_create($options);
+         $result = file_get_contents($url, false, $context);
+         $result_json = json_decode($result, true);
+         if (!$result_json['success']) {
+             header('location:../Vista/MensajeUsuarios.php?error=recaptcha_invalid');
+             exit;
+         }
+
+         // VALIDAR INICIO DE SESIÓN
+         $usuario = $con->login($cnn, $_POST['Usuario'], $_POST['Clave']);
 
         if ($usuario) {
             // Inicializar variables de sesión

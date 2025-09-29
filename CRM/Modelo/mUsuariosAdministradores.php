@@ -8,6 +8,7 @@ class UsuariosAdmin {
     private $Estado;
     private $TipoUsuarios;
     private $FotosPerfiles;
+    private $Email;
 
     // --- GETTERS & SETTERS ---
     public function setID($n){ $this->ID_Admin = $n; }
@@ -30,6 +31,9 @@ class UsuariosAdmin {
 
     public function setFotosUser($n){ $this->FotosPerfiles = $n; }
     public function getFotosUser(){ return $this->FotosPerfiles; }
+
+    public function setEmail($n){ $this->Email = $n; }
+    public function getEmail(){ return $this->Email; }
 
     // --- CONSULTAR TODOS LOS ADMINISTRADORES ---
     public function ConsultarUsuariosAdmin($cnn) {
@@ -54,52 +58,175 @@ class UsuariosAdmin {
             $this->setEstados($Usuarios['estado']);
             $this->setTipoUser($Usuarios['tipo_usuario']);
             $this->setFotosUser($Usuarios['foto_perfil']);
+            $this->setEmail($Usuarios['email']);
         }
         $stmt->close();
     }
 
     // --- INSERTAR NUEVO ADMINISTRADOR ---
-    public function InsertarUsuarioAdministradores($cnn, $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins) {
-        $stmt = $cnn->prepare("CALL InsertarAdministradores(?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issssss", $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins);
+    public function InsertarUsuarioAdministradores($cnn, $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins, $EmailUsuario) {
+        $stmt = $cnn->prepare("CALL InsertarAdministradores(?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssssss", $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins, $EmailUsuario);
 
         $ok = $stmt->execute();
         $stmt->close();
 
         if ($ok) {
-            include('../Vista/MensajesUsuarios/RegistroInsertado.html');
+            echo '<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Registro Exitoso</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Usuario registrado exitosamente.</p>
+        <strong>Nombre:</strong> ' . $NomUsuario . '<br>
+        <strong>Email:</strong> ' . $EmailUsuario . '<br>
+        <strong>Foto de Perfil:</strong><br><img src="../Vista/dist/fotosperfiles/' . $FotoUsuarioAdmins . '" alt="Foto de Perfil" class="img-thumbnail" width="100">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=4\'">Ir a Gestionar Usuarios</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#successModal").modal("show");</script>';
         } else {
-            include('../Vista/MensajesUsuarios/RegistroNoInsertado.html');
+            echo '<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error en el Registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Error al guardar el registro. Verifique los datos e intente nuevamente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=2\'">Volver al Formulario</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#errorModal").modal("show");</script>';
         }
     }
 
     // --- MODIFICAR PERFIL SIN FOTO ---
-    public function ModificarPerfilUsuarioAdministradores($cnn, $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario) {
-        $stmt = $cnn->prepare("CALL ModificarPerfilAdministradores(?, ?, ?, ?, ?)");
-        $stmt->bind_param("issss", $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario);
+    public function ModificarPerfilUsuarioAdministradores($cnn, $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $EmailUsuario) {
+        $stmt = $cnn->prepare("CALL ModificarPerfilAdministradores(?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssss", $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $EmailUsuario);
 
         $ok = $stmt->execute();
         $stmt->close();
 
         if ($ok) {
-            include('../Vista/MensajesUsuarios/RegistroModificadoPerfilAdmins.html');
+            echo '<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Perfil Modificado</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Perfil modificado exitosamente.</p>
+        <strong>Nombre:</strong> ' . $NomUsuario . '<br>
+        <strong>Email:</strong> ' . $EmailUsuario . '
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=7\'">Volver al Perfil</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#successModal").modal("show");</script>';
         } else {
-            include('../Vista/MensajesUsuarios/RegistroNoModificadoPerfilAdmins.html');
+            echo '<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error en la Modificación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Error al modificar el perfil. Verifique los datos e intente nuevamente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=7\'">Volver al Perfil</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#errorModal").modal("show");</script>';
         }
     }
 
     // --- MODIFICAR PERFIL CON FOTO ---
-    public function ModificarPerfilUsuarioAdministradoresFotos($cnn, $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins) {
-        $stmt = $cnn->prepare("CALL ModificarPerfilAdministradoresFotoIncluida(?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("isssss", $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins);
+    public function ModificarPerfilUsuarioAdministradoresFotos($cnn, $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins, $EmailUsuario) {
+        $stmt = $cnn->prepare("CALL ModificarPerfilAdministradoresFotoIncluida(?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("issssss", $IdUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins, $EmailUsuario);
 
         $ok = $stmt->execute();
         $stmt->close();
 
         if ($ok) {
-            include('../Vista/MensajesUsuarios/RegistroModificadoPerfilAdmins.html');
+            echo '<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Perfil Modificado</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Perfil modificado exitosamente.</p>
+        <strong>Nombre:</strong> ' . $NomUsuario . '<br>
+        <strong>Email:</strong> ' . $EmailUsuario . '<br>
+        <strong>Foto de Perfil:</strong><br><img src="../Vista/dist/fotosperfiles/' . $FotoUsuarioAdmins . '" alt="Foto de Perfil" class="img-thumbnail" width="100">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=7\'">Volver al Perfil</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#successModal").modal("show");</script>';
         } else {
-            include('../Vista/MensajesUsuarios/RegistroNoModificadoPerfilAdmins.html');
+            echo '<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error en la Modificación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Error al modificar el perfil. Verifique los datos e intente nuevamente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=7\'">Volver al Perfil</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#errorModal").modal("show");</script>';
         }
     }
 
@@ -112,17 +239,58 @@ class UsuariosAdmin {
     }
 
     // --- MODIFICAR USUARIO (CON FOTO OBLIGATORIA) ---
-    public function ModificarAdministradores($cnn, $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins) {
-        $stmt = $cnn->prepare("CALL ModificarUsuariosAdministradores(?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("issssss", $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins);
+    public function ModificarAdministradores($cnn, $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins, $EmailUsuario) {
+        $stmt = $cnn->prepare("CALL ModificarUsuariosAdministradores(?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("isssssss", $IdUsuario, $CodUsuario, $NomUsuario, $PassUsuario, $EstadoUsuario, $TipoUsuario, $FotoUsuarioAdmins, $EmailUsuario);
 
         $ok = $stmt->execute();
         $stmt->close();
 
         if ($ok) {
-            include('../Vista/MensajesUsuarios/RegistroModificadoUsuariosAdmins.html');
+            echo '<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Usuario Modificado</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Usuario modificado exitosamente.</p>
+        <strong>Nombre:</strong> ' . $NomUsuario . '<br>
+        <strong>Email:</strong> ' . $EmailUsuario . '<br>
+        <strong>Foto de Perfil:</strong><br><img src="../Vista/dist/fotosperfiles/' . $FotoUsuarioAdmins . '" alt="Foto de Perfil" class="img-thumbnail" width="100">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=4\'">Ir a Gestionar Usuarios</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#successModal").modal("show");</script>';
         } else {
-            include('../Vista/MensajesUsuarios/RegistroNoModificadoUsuariosAdmins.html');
+            echo '<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error en la Modificación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Error al modificar el usuario. Verifique los datos e intente nuevamente.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="window.location.href=\'../Controlador/cUsuariosAdministradores.php?acc=4\'">Volver a Gestionar Usuarios</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>$("#errorModal").modal("show");</script>';
         }
     }
 }

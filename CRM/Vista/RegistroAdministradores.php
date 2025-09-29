@@ -18,8 +18,8 @@ if($_SESSION['vsTipo']=="Usuario"){
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>..:: Sistema Gesti&oacute;n de Casos vtiger | Registro Nuevos Administradores ..::</title>
-    <meta name="description" content="Sistema Gesti&oacute;n de Casos vtiger CRM Espa&ntilde;ol" />
+    <title>..:: Sistema de Gestión CRM | Registro Nuevos Administradores ..::</title>
+    <meta name="description" content="Sistema de Gestión CRM" />
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="../Vista/dist/img/favicon.ico">
@@ -82,8 +82,8 @@ if($_SESSION['vsTipo']=="Usuario"){
         <nav class="navbar navbar-expand-xl navbar-light fixed-top hk-navbar shadow-lg shadow-hover-xl">
             <a id="navbar_toggle_btn" class="navbar-toggle-btn nav-link-hover" href="javascript:void(0);"><span class="feather-icon"><i data-feather="menu"></i></span></a>
             <a class="navbar-brand font-weight-700" href="../Vista/AdministracionAdmin.php?acc=1">
-                VTiger
-            </a>
+                 CRM
+             </a>
             <ul class="navbar-nav hk-navbar-content">
                 <!-- BUSCADOR 
                 <li class="nav-item">
@@ -614,8 +614,6 @@ if($_SESSION['vsTipo']=="Usuario"){
                     <button id="reset_settings" class="btn btn-primary btn-block btn-reset mt-30">Reiniciar Ajustes</button>
                 </div>
             </div>
-            <img class="d-none" src="../Vista/dist/img/logo-light.png" alt="brand" />
-            <img class="d-none" src="../Vista/dist/img/logo-dark.png" alt="brand" />
         </div>
         <!-- /Setting Panel -->
 
@@ -671,8 +669,8 @@ if($_SESSION['vsTipo']=="Usuario"){
 
                                             <!-- CODIGO -->
                                             <div class="col-md-6 mb-10">
-                                                <label for="validationCustom01">Ingrese el c&oacute;digo del Usuario <span class="CampoObligatorio">(*)</span></label></label>
-                                                <input type="text" minlength="5" maxlength="5" name="CodAd" class="form-control" id="validationCustom01" placeholder="Por favor Ingrese C&oacute;digo Usuario..." value="" data-mask="AD999" data-toggle="tooltip-pink" data-placement="top" title="Por favor respetar formato ADXXX" required>
+                                                <label for="validationCustom02">Ingrese el c&oacute;digo del Usuario <span class="CampoObligatorio">(*)</span></label></label>
+                                                <input type="text" minlength="5" maxlength="5" name="CodAd" class="form-control" id="validationCustom02" placeholder="Por favor Ingrese C&oacute;digo Usuario..." value="" data-mask="AD999" data-toggle="tooltip-pink" data-placement="top" title="Por favor respetar formato ADXXX" required>
                                                 <!-- INVALIDO -->
                                                 <div class="invalid-feedback">
                                                     Por favor ingrese el c&oacute;digo...<br>
@@ -687,8 +685,8 @@ if($_SESSION['vsTipo']=="Usuario"){
 
                                             <!-- NOMBRE USUARIO -->
                                             <div class="col-md-6 mb-10">
-                                                <label for="validationCustom01">Ingrese el nombre de Usuario <span class="CampoObligatorio">(*)</span></label></label>
-                                                <input type="text" minlength="3" maxlength="50" name="NomAd" class="form-control" id="validationCustom01" placeholder="Por favor Ingrese C&oacute;digo Usuario..." value="" required>
+                                                <label for="validationCustom03">Ingrese el nombre de Usuario <span class="CampoObligatorio">(*)</span></label></label>
+                                                <input type="text" minlength="3" maxlength="50" name="NomAd" class="form-control" id="validationCustom03" placeholder="Por favor Ingrese Nombre Usuario..." value="" required>
                                                 <!-- INVALIDO -->
                                                 <div class="invalid-feedback">
                                                     Por favor ingrese el nombre de usuario...<br>
@@ -703,13 +701,27 @@ if($_SESSION['vsTipo']=="Usuario"){
 
                                             <!-- CONTRASEÑA -->
                                             <div class="col-md-6 mb-10">
-                                                <label for="validationCustom01">Ingrese la contrase&ntilde;a <span class="CampoObligatorio">(*)</span></label></label>
-                                                <input type="password" minlength="5" maxlength="15" name="PassAd" class="form-control" id="validationCustom01" placeholder="Por favor Ingrese Contrase&ntilde;a Usuario..." minlength="5" maxlength="15" data-toggle="tooltip-pink" data-placement="top" title="M&iacute;nimo 5 caracteres" value="" required>
+                                                <label for="validationCustom04">Ingrese la contrase&ntilde;a <span class="CampoObligatorio">(*)</span></label></label>
+                                                <input type="password" minlength="5" maxlength="15" name="PassAd" class="form-control" id="validationCustom04" placeholder="Por favor Ingrese Contrase&ntilde;a Usuario..." minlength="5" maxlength="15" data-toggle="tooltip-pink" data-placement="top" title="M&iacute;nimo 5 caracteres" value="" required>
                                                 <!-- INVALIDO -->
                                                 <div class="invalid-feedback">
                                                     Por favor ingrese una contrase&ntilde;a...<br>
                                                     Car&aacute;cteres M&iacute;nimos: 5
                                                     Car&aacute;cteres M&aacute;ximos: 15
+                                                </div>
+                                                <!-- VALIDO -->
+                                                <div class="valid-feedback">
+                                                    Campo Completado Exitosamente!...
+                                                </div>
+                                            </div>
+
+                                            <!-- EMAIL -->
+                                            <div class="col-md-6 mb-10">
+                                                <label for="validationCustom05">Ingrese el email <span class="CampoObligatorio">(*)</span></label></label>
+                                                <input type="email" name="EmailAd" class="form-control" id="validationCustom05" placeholder="Por favor Ingrese Email Usuario..." value="" required>
+                                                <!-- INVALIDO -->
+                                                <div class="invalid-feedback">
+                                                    Por favor ingrese un email v&aacute;lido...
                                                 </div>
                                                 <!-- VALIDO -->
                                                 <div class="valid-feedback">
@@ -754,7 +766,7 @@ if($_SESSION['vsTipo']=="Usuario"){
 
                                             <!-- FOTO PERFIL USUARIO -->
                                             <div class="col-md-12 mb-10">
-                                                <label for="validationCustom01">Ingrese su foto de perfil <span class="CampoObligatorio">(*)</span></label></label>
+                                                <label for="validationCustom06">Ingrese su foto de perfil <span class="CampoObligatorio">(*)</span></label></label>
                                                 <input type="file" id="input-file-now" name="FotoPerfilAdmins" class="form-control dropify"  data-max-file-size="2M" accept="image/x-png,image/jpeg" data-toggle="tooltip-pink" data-placement="top" title="Campo Obligatorio" required>
                                                 <p>Formatos V&aacute;lidos: jpg,png  |  MAX: 2MB</p>
                                                 <!-- INVALIDO -->
@@ -781,7 +793,7 @@ if($_SESSION['vsTipo']=="Usuario"){
                 <footer class="footer">
                     <div class="row">
                         <div class="col-md-6 col-sm-12">
-                            <p>&copy; Copyright 2020 | CRM VTiger S.A de C.V</p>
+                            <p>&copy; Copyright 2020 | Sistema de Gestión CRM</p>
                         </div>
                     </div>
                 </footer>

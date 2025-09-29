@@ -21,8 +21,8 @@
 */
 session_start();
 // CONEXION DE SISTEMA CRM -> IMPORTANDO ARCHIVO
-require('../modelo/conexion.php');
-// ACC -> ACCION CONTROLADOR {URL} 
+require(__DIR__ . '/../Modelo/conexion.php');
+// ACC -> ACCION CONTROLADOR {URL}
 if(isset($_GET['acc']))
 {
 	$accion=$_GET['acc']; // ENVIO GET DE VALOR ACCION {URL}

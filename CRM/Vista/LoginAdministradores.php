@@ -1,10 +1,11 @@
+<?php require_once '../envLoader.php'; cargarEnv(); ?>
 <!DOCTYPE html>
 <html lang="ES-SV">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>..:: Sistema Gesti&oacute;n de Casos vtiger ..::</title>
-    <meta name="description" content="Sistema Gesti&oacute;n de Casos vtiger CRM Espa&ntilde;ol" />
+    <title>..:: Sistema de Gestión CRM ..::</title>
+    <meta name="description" content="Sistema de Gestión CRM" />
     <!-- Favicon -->
     <link rel="shortcut icon" href="../Vista/dist/img/favicon.ico">
     <link rel="icon" href="../Vista/dist/img/favicon.ico" type="image/x-icon">
@@ -27,6 +28,8 @@
     <meta name="theme-color" content="#ffffff">
     <!-- Custom CSS -->
     <link href="../Vista/dist/css/style.css" rel="stylesheet" type="text/css">
+    <!-- reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 	<!-- HK Wrapper -->
@@ -36,7 +39,7 @@
         <div class="hk-pg-wrapper hk-auth-wrapper">
             <header class="d-flex justify-content-between align-items-center">
                 <a class="d-flex text-white auth-brand" href="#">
-                    VTiger
+                    CRM
                 </a>
             </header>
             <div class="container-fluid">
@@ -98,6 +101,9 @@
                                                 <span class="input-group-text"><span class="feather-icon"><i data-feather="eye-off"></i></span></span>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="g-recaptcha" data-sitekey="<?php echo env('RECAPTCHA_SITE_KEY'); ?>"></div>
                                     </div>
                                     <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-plus"></i> Ingresar</button>
                                     <div class="option-sep"> :) </div>

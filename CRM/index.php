@@ -2,10 +2,10 @@
 <html lang="ES-SV">
 <head>
     <meta charset="utf-8">
-    <title>:: Sistema Gesti&oacute;n de Casos VTiger ::</title>
+    <title>:: Sistema de Gestión CRM ::</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="CRM Gesti&oacute;n de casos en espa&ntilde;ol">
-    <meta name="author" content="Sistema Gesti&oacute;n de Casos VTiger">
+    <meta name="description" content="Sistema de Gestión CRM">
+    <meta name="author" content="Sistema de Gestión CRM">
     <link rel="stylesheet" type="text/css" href="Vista/dist/css/estilos-generales.css">
     <link rel="stylesheet" type="text/css" href="Vista/dist/css/responsivo.css">
     <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
@@ -35,26 +35,17 @@
 <div class="contenedor_principal">
   <div class="barra_principal">
     <img src="Vista/dist/img/logo.png">
-    <h2>Sistema Gesti&oacute;n de Casos VTiger</h2>
+    <h2>Sistema de Gestión CRM</h2>
   </div><!-- cierre barra principal -->
   <div class="contenedor_secundario">  
-    <h2>Por favor, elija su tipo de usuario (rol)</h2>
+    <h2>Inicio de Sesión</h2>
     <ul class="opcion_usuario">
         <li>
-            <a href="Controlador/ControlLoginAdmin.php?acc=1">
+            <a href="Controlador/ControlLoginUnificado.php?acc=1">
                 <img class="icons-users" src="Vista/dist/img/icon-admins.png" alt="departamento administrativo">
-                <div class="contenedor_menu_bloque">
-                    <h2 class="titulo_principal_menu">Administradores</h2>
-                    <h3 class="titulo_secundario_menu">Administradores del Sistema VTiger</h3>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="Controlador/ControlLoginEmpleados.php?acc=1">
-                <img class="icons-users" src="Vista/dist/img/icon-empleados.png" alt="departamento de personal">
-                <div class="contenedor_menu_bloque">
-                    <h2 class="titulo_principal_menu">Empleados</h2>
-                    <h3 class="titulo_secundario_menu">Empleados de Gesti&oacute;n de Casos VTiger</h3>
+                <div class="contenedor_menu_bloque" style="text-align: center;">
+                    <h2 class="titulo_principal_menu">Iniciar Sesión</h2>
+                    <h3 class="titulo_secundario_menu">Acceso para Administradores y Empleados</h3>
                 </div>
             </a>
         </li>

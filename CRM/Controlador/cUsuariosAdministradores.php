@@ -69,18 +69,19 @@ switch ($accion)
         	$PassUsuario=$_POST['PassAd']; // CONTRASEÑA USUARIO
         	$EstadoUsuario=$_POST['EstadoAd']; // ESTADO USUARIO
         	$TipoUsuario=$_POST['TipoUAd']; // TIPO DE USUARIO
+        	$EmailUsuario=$_POST['EmailAd']; // EMAIL USUARIO
             //Capturar el nombre del archivo
             $FotoUsuarioAdmins=$_FILES['FotoPerfilAdmins']['name'];
             $destino='../Vista/dist/fotosperfiles/'.$FotoUsuarioAdmins;
             $typ=$_FILES['FotoPerfilAdmins']['type']; //Captura la extension del archivo
         	// SI USUARIO INTENTA ACCEDER A LA ACCION CON VARIABLES VACIAS, ENTONCES...
-            if(empty($IdUsuario || $CodUsuario || $NomUsuario || $PassUsuario || $EstadoUsuario || $TipoUsuario || $FotoUsuarioAdmins)){
+            if(empty($IdUsuario || $CodUsuario || $NomUsuario || $PassUsuario || $EstadoUsuario || $TipoUsuario || $FotoUsuarioAdmins || $EmailUsuario)){
                 header('location:../Controlador/cUsuariosAdministradores.php?acc=4');
             }else{
                 // CASO CONTRARIO, INGRESA ACCION A BASE DE DATOS
-    		  $consulta=$Usuarios->InsertarUsuarioAdministradores($cnn,$IdUsuario,$CodUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$FotoUsuarioAdmins);
+        $consulta=$Usuarios->InsertarUsuarioAdministradores($cnn,$IdUsuario,$CodUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$FotoUsuarioAdmins,$EmailUsuario);
                 //Subir la imagen al servidor
-                copy($_FILES['FotoPerfilAdmins']['tmp_name'],$destino); 
+                copy($_FILES['FotoPerfilAdmins']['tmp_name'],$destino);
             }
         }else if($_SESSION['vsTipo']=="Usuario"){
            header ('location:../Vista/Empleados/PrincipalEmpleados.php?acc=1'); 
@@ -139,39 +140,39 @@ switch ($accion)
     // CIERRE DE SESION
     case 8:
         if($_SESSION['vsTipo']=="Administrador"){
-            session_start(); 
-            session_destroy(); 
-            header('location: ../index.php');
+            session_destroy();
+            header('location: ../Controlador/ControlLoginUnificado.php?acc=3');
         }else if($_SESSION['vsTipo']=="Usuario"){
-            header ('location:../Vista/Empleados/PrincipalEmpleados.php?acc=1');
+            session_destroy();
+            header('location: ../Controlador/ControlLoginUnificado.php?acc=3');
         }else{
             header ('location:../index.php');
         }
-        $cnn->close(); // CERRANDO CONEXION
-    break;  
+        break;
     // MODIFICAR PERFIL DE USUARIO ADMINISTRADORES
     case 9:
         if($_SESSION['vsTipo']=="Administrador"){
             $IdUsuario=$_POST['IdAd']; // ID USUARIO
             $NomUsuario=$_POST['NomAd']; // NOMBRE USUARIO
-            $PassUsuario=$_POST['PassAd']; // CONTRASEÑA USUARIO
+            $PassUsuario = password_hash($_POST['PassAd'], PASSWORD_BCRYPT); // CONTRASEÑA USUARIO HASHEADA
             $EstadoUsuario=$_POST['EstadoAd']; // ESTADO USUARIO
             $TipoUsuario=$_POST['TipoUAd']; // TIPO USUARIO
+            $EmailUsuario=$_POST['EmailAd']; // EMAIL USUARIO
             $FotoUsuarioAdmins=$_FILES['FotoPerfilAdmins']['name']; // FOTO DE PERFIL
             // SI USUARIO INTENTA ACCEDER A LA ACCION CON VARIABLES VACIAS, ENTONCES...
-            if(empty($IdUsuario || $NomUsuario || $PassUsuario || $EstadoUsuario || $TipoUsuario)){
+            if(empty($IdUsuario || $NomUsuario || $PassUsuario || $EstadoUsuario || $TipoUsuario || $EmailUsuario)){
                     header('location:../Controlador/cUsuariosAdministradores.php?acc=7');
             }else{
                 // CASO CONTRARIO, INGRESA ACCION A BASE DE DATOS
                 if(empty($FotoUsuarioAdmins)){
                     // SI USUARIO NO INGRESA FOTO NUEVA, LLAMA SP NORMAL SIN ENVIO DE FOTO
-                    $consulta=$Usuarios->ModificarPerfilUsuarioAdministradores($cnn,$IdUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario);
+                    $consulta=$Usuarios->ModificarPerfilUsuarioAdministradores($cnn,$IdUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$EmailUsuario);
                 }else{// CASO CONTRARIO, LLAMA SP PERSONALIZADO CON ENVIO DE FOTO
                     // NOMBRE DE FOTO A SUBIR
                     $FotoUsuarioAdmins=$_FILES['FotoPerfilAdmins']['name'];
                     $destino='../Vista/dist/fotosperfiles/'.$FotoUsuarioAdmins;
                     $typ=$_FILES['FotoPerfilAdmins']['type']; // EXTENSION ARCHIVO
-                    $consulta=$Usuarios->ModificarPerfilUsuarioAdministradoresFotos($cnn,$IdUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$FotoUsuarioAdmins);
+                    $consulta=$Usuarios->ModificarPerfilUsuarioAdministradoresFotos($cnn,$IdUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$FotoUsuarioAdmins,$EmailUsuario);
                     copy($_FILES['FotoPerfilAdmins']['tmp_name'],$destino);
                     // ACTUALIZAR VARIABLE DE SESION CON NUEVA FOTO DE PERFIL INSERTADA
                     $_SESSION['vsFotosPerfilesUs']=$FotoUsuarioAdmins;
@@ -214,20 +215,21 @@ switch ($accion)
     case 12:
         if($_SESSION['vsTipo']=="Administrador"){
             $IdUsuario=$_POST['IdAd']; // ID DE USUARIO
-            $CodUsuario=$_POST['CodAd']; // CODIGO DE USUARIO        
+            $CodUsuario=$_POST['CodAd']; // CODIGO DE USUARIO
             $NomUsuario=$_POST['NomAd']; // NOMBRE DE USUARIO
             $PassUsuario=$_POST['PassAd']; // CONTRASEÑA DE USUARIO
             $EstadoUsuario=$_POST['EstadoAd']; // ESTADO DE USUARIO
             $TipoUsuario=$_POST['TipoUAd']; // TIPO DE USUARIO
+            $EmailUsuario=$_POST['EmailAd']; // EMAIL DE USUARIO
             $FotoUsuarioAdmins=$_FILES['FotoPerfilAdmins']['name'];     // FOTO DE PERFIL
             $destino='../Vista/dist/fotosperfiles/'.$FotoUsuarioAdmins; // DESTINO {RUTA}
             $typ=$_FILES['FotoPerfilAdmins']['type']; //Captura la extension del archivo
             // SI USUARIO INTENTA ACCEDER A LA ACCION CON VARIABLES VACIAS, ENTONCES...
-            if(empty($IdUsuario ||$CodUsuario || $NomUsuario || $PassUsuario || $EstadoUsuario || $TipoUsuario || $FotoUsuarioAdmins)){
+            if(empty($IdUsuario ||$CodUsuario || $NomUsuario || $PassUsuario || $EstadoUsuario || $TipoUsuario || $FotoUsuarioAdmins || $EmailUsuario)){
                 header('location:../Controlador/cUsuariosAdministradores.php?acc=4');
             }else{
                 // CASO CONTRARIO, INGRESA ACCION A BASE DE DATOS
-                $consulta=$Usuarios->ModificarAdministradores($cnn,$IdUsuario,$CodUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$FotoUsuarioAdmins); 
+                $consulta=$Usuarios->ModificarAdministradores($cnn,$IdUsuario,$CodUsuario,$NomUsuario,$PassUsuario,$EstadoUsuario,$TipoUsuario,$FotoUsuarioAdmins,$EmailUsuario);
             }
             //Subir la imagen al servidor
             copy($_FILES['FotoPerfilAdmins']['tmp_name'],$destino); // ENVIO RUTA A BASE DE DATOS
